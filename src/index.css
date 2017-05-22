@@ -1,0 +1,106 @@
+body {
+  margin: 0;
+  padding: 24px;
+  font-family: sans-serif;
+}
+
+p {
+  line-height: 1.5rem;
+}
+
+p:first-of-type {
+  margin-top: 0;
+}
+
+p:last-of-type {
+  margin-bottom: 0;
+}
+
+pre {
+  float: left;
+  width: 40%;
+  padding-left: 12px;
+  white-space: pre-wrap;
+}
+
+.Example-retained-rect {
+  position: absolute;
+  background-color: #FFF794;
+  user-select: none;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.Example-removed-rect {
+  position: absolute;
+  background-color: red;
+  user-select: none;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  opacity: 0.15;
+}
+
+.Example-added-rect {
+  position: absolute;
+  background-color: #FFF794;
+  /*background-color: #B2E8B2;*/
+  user-select: none;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.TextSelection *::selection {
+  background-color: transparent;
+}
+
+.TextSelection *::-moz-selection {
+  background-color: transparent;
+}
+
+.Knob {
+  border: 1px solid #E04746;
+  width: 8px;
+  height: 8px;
+  border-radius: 16px;
+  position: absolute;
+  background-color: white;
+  visibility: hidden;
+  opacity: 0;
+  cursor: col-resize;
+  transition: opacity 0.15s ease;
+}
+
+.Knob--visible {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.15s ease;
+}
+
+.Knob--dragging {
+  pointer-events: none;
+}
+
+.Knob:hover {
+  background-color: #FADBDD;
+}
+
+.Knob:active {
+  background-color: #EB797B;
+  border: 2px solid #DD342E;
+  cursor: none;
+}
+
+.Knob:focus {
+  border-width: 2px;
+  outline: none;
+  position: relative;
+  box-shadow:
+    0 0 0 1px white,
+    0 0 0 2px #4498DE;
+}
+
+.Caret {
+  width: 1px;
+  background-color: red;
+  pointer-events: none;
+}
