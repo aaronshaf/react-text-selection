@@ -58,7 +58,7 @@ pre {
 }
 
 .Knob {
-position: absolute;
+  position: absolute;
   border: 1px solid #E04746;
   left: -4px;
   width: 7px;
@@ -77,14 +77,6 @@ position: absolute;
   transition: opacity 0.15s ease;
 }
 
-.Boundary {
-  position: absolute;
-}
-
-.Boundary:focus {
-  outline: none;
-}
-
 .Knob--focus {
   box-shadow:
     0 0 0 1px white,
@@ -93,6 +85,7 @@ position: absolute;
 
 .Knob--focus,
 .Knob--hover {
+  left: -5px;
   border-width: 2px;
   background-color: #FADBDD;
 }
@@ -101,6 +94,14 @@ position: absolute;
   background-color: #EB797B;
   border: 2px solid #DD342E;
   cursor: none;
+}
+
+.Boundary {
+  position: absolute;
+}
+
+.Boundary:focus {
+  outline: none;
 }
 
 .Boundary-caret {
