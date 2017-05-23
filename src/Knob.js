@@ -115,7 +115,7 @@ export default class Knob extends Component {
           style={{
             position: 'absolute',
             left: `${this.props.left - 4}px`,
-            top: `${this.props.top - 9}px`
+            top: `${this.props.kind === 'start' ? this.props.top - 9 : this.props.bottom}px`
           }}
         />
         <div

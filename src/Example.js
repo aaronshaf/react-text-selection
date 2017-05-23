@@ -160,7 +160,7 @@ export default class Example extends Component {
       <Knob
         kind='start'
         isHighlighting={this.state.isHighlighting}
-        left={firstRect.left}
+        left={firstRect.left - 1}
         top={firstRect.top}
         height={firstRect.height}
         onMove={this.handleStartKnobMove}
@@ -170,8 +170,9 @@ export default class Example extends Component {
       <Knob
         kind='end'
         isHighlighting={this.state.isHighlighting}
-        left={lastRect.right - 1}
+        left={lastRect.right}
         top={lastRect.top}
+        bottom={lastRect.bottom}
         height={firstRect.height}
         onMove={this.handleStartKnobMove}
       />
