@@ -50,9 +50,6 @@ export default class TextSelection extends Component {
   }
 
   setRange = (selection, range) => {
-    if (range.collapsed && !this.isCollapsed) {
-      return
-    }
     this.isCollapsed = range.collapsed
     if (!this.div.contains(range.commonAncestorContainer)) {
       this.clientRectsArray = []
