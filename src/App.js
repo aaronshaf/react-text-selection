@@ -7,6 +7,7 @@ class App extends Component {
       <div className="App">
         <div className="App-header">
           <h2>react-text-selection</h2>
+          <p>This is a messy WIP. Stay tuned.</p>
         </div>
         <Example>
           <div
