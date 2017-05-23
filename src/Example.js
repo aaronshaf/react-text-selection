@@ -193,7 +193,7 @@ export default class Example extends Component {
         left={lastRect.right}
         top={lastRect.top}
         bottom={lastRect.bottom}
-        height={firstRect.height}
+        height={lastRect.height}
       />
 
     return (
