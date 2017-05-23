@@ -1,52 +1,42 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 export default class BoundaryControl extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      isDragging: false,
-      clientX: null,
-      clientY: null
+      isDragging: false
     }
   }
 
-  shouldComponentUpdate (nextProps, nextState) {
+  shouldComponentUpdate(nextProps, nextState) {
     return !this.state.isDragging
   }
 
   handleKnobMouseDown = event => {
     // document.body.style.userSelect = 'none'
-    console.debug('handleKnobMouseDown 1')
     event.stopPropagation()
     event.preventDefault()
+    this.props.onHighlightStart(event)
     this.setState({ isDragging: true }, () => {
-      console.debug('handleKnobMouseDown 2')
       document.addEventListener('mousemove', this.handleKnobMouseMove)
       document.addEventListener('mouseup', this.handleKnobMouseUp)
     })
-    // this.props.onMouseDown()
   }
 
   handleKnobMouseMove = event => {
-    console.debug('handleKnobMouseMove')
     event.stopPropagation()
-    if (!this.state.isDragging) {
+    if (!this.props.isHighlighting) {
       return
     }
-    // console.debug(range)
-    // const textNode = range.startContainer
-    // offset = range.startOffset
     const range = document.caretRangeFromPoint(event.clientX, event.clientY + 8)
-    // console.debug(range)
     if (this.props) {
       this.props.onMove(range)
     }
   }
 
   handleKnobMouseUp = () => {
-    // document.body.style.userSelect = 'auto'
     this.setState({ isDragging: false })
-    // this.props.onMouseUp()
     document.removeEventListener('mouseup', this.handleKnobMouseUp)
     document.removeEventListener('mousemove', this.handleKnobMouseMove)
   }
@@ -59,11 +49,10 @@ export default class BoundaryControl extends Component {
           divRect.left - 3 - 1,
           divRect.top + 8
         )
-        console.debug(caretRange)
         const range = document.createRange()
         range.setStart(
           caretRange.startContainer,
-          caretRange.startOffset > 0 ? caretRange.startOffset : 0
+          caretRange.startOffset > 0 ? caretRange.startOffset - 1 : 0
         )
         this.props.onMove(range)
         break
@@ -71,16 +60,23 @@ export default class BoundaryControl extends Component {
       case 'ArrowRight': {
         const divRect = this.div.getBoundingClientRect()
         const caretRange = document.caretRangeFromPoint(
-          divRect.left + 1,
-          divRect.top + 4
+          divRect.left - 3 - 1,
+          divRect.top + 8
         )
-        console.debug(caretRange)
         const range = document.createRange()
         range.setStart(
           caretRange.startContainer,
-          caretRange.startOffset > 0 ? caretRange.startOffset : 0
+          caretRange.startOffset > 0 ? caretRange.startOffset + 2 : 0
         )
         this.props.onMove(range)
+        break
+      }
+      case 'ArrowUp': {
+        event.preventDefault()
+        break
+      }
+      case 'ArrowDown': {
+        event.preventDefault()
         break
       }
       default:
@@ -101,12 +97,18 @@ export default class BoundaryControl extends Component {
         onKeyDown={this.handleKeyPress}
         onMouseDown={this.handleKnobMouseDown}
         style={{
-          position: this.state.isDragging ? 'fixed' : 'absolute',
-          left: `${this.state.isDragging ? this.state.clientX : this.props.left - 1}px`,
-          top: `${this.state.isDragging ? this.state.clientY : this.props.top - 1}px`,
-          height: `${this.props.height}px`
+          display: this.props.isHighlighting ? 'none' : 'block',
+          position: 'absolute',
+          left: `${this.props.left - 1}px`,
+          top: `${this.props.top - 1}px`,
+          height: `${this.props.height}px`,
+          backgroundColor: this.props.isHighlighting ? 'green' : 'purple'
         }}
       />
     )
   }
+}
+
+BoundaryControl.propTypes = {
+  isHighlighting: PropTypes.bool
 }
