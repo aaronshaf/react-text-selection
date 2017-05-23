@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
-import classnames from 'classnames'
 
-export default class Knob extends Component {
+export default class BoundaryControl extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -10,25 +9,26 @@ export default class Knob extends Component {
       clientY: null
     }
   }
+
+  shouldComponentUpdate (nextProps, nextState) {
+    return !this.state.isDragging
+  }
+
   handleKnobMouseDown = event => {
+    // document.body.style.userSelect = 'none'
+    console.debug('handleKnobMouseDown 1')
     event.stopPropagation()
     event.preventDefault()
-    this.setState(
-      {
-        isDragging: true,
-        clientX: event.clientX,
-        clientY: event.clientY
-      },
-      () => {
-        // console.debug('handleKnobMouseDown')
-        document.addEventListener('mousemove', this.handleKnobMouseMove)
-        document.addEventListener('mouseup', this.handleKnobMouseUp)
-      }
-    )
+    this.setState({ isDragging: true }, () => {
+      console.debug('handleKnobMouseDown 2')
+      document.addEventListener('mousemove', this.handleKnobMouseMove)
+      document.addEventListener('mouseup', this.handleKnobMouseUp)
+    })
     // this.props.onMouseDown()
   }
 
   handleKnobMouseMove = event => {
+    console.debug('handleKnobMouseMove')
     event.stopPropagation()
     if (!this.state.isDragging) {
       return
@@ -36,25 +36,15 @@ export default class Knob extends Component {
     // console.debug(range)
     // const textNode = range.startContainer
     // offset = range.startOffset
-    this.setState(
-      {
-        clientX: event.clientX,
-        clientY: event.clientY
-      },
-      () => {
-        const range = document.caretRangeFromPoint(
-          event.clientX,
-          event.clientY + 8
-        )
-        // console.debug(range)
-        if (this.props) {
-          this.props.onMove(range)
-        }
-      }
-    )
+    const range = document.caretRangeFromPoint(event.clientX, event.clientY + 8)
+    // console.debug(range)
+    if (this.props) {
+      this.props.onMove(range)
+    }
   }
 
   handleKnobMouseUp = () => {
+    // document.body.style.userSelect = 'auto'
     this.setState({ isDragging: false })
     // this.props.onMouseUp()
     document.removeEventListener('mouseup', this.handleKnobMouseUp)
@@ -105,36 +95,18 @@ export default class Knob extends Component {
   render() {
     return (
       <div
+        className="BoundaryControl"
         tabIndex="0"
+        ref={this.setDiv}
         onKeyDown={this.handleKeyPress}
-        className="Boundary"
         onMouseDown={this.handleKnobMouseDown}
-      >
-        <div
-          className={`Knob ${this.props.isHighlighting ? 'Knob--dragging' : ''}`}
-          style={{
-            position: 'absolute',
-            left: `${this.props.left - 4}px`,
-            top: `${this.props.kind === 'start' ? this.props.top - 9 : this.props.bottom}px`
-          }}
-        />
-        <div
-          ref={this.setDiv}
-          className={`Boundary-caret ${this.props.isHighlighting ? 'Boundary-caret--dragging' : ''}`}
-          style={{
-            left: `${this.props.left - 1}px`,
-            top: `${this.props.top}px`,
-            height: `${this.props.height}px`
-          }}
-        >
-          <div
-            className="Boundary-caret-inner"
-            style={{
-              height: `${this.props.height}px`
-            }}
-          />
-        </div>
-      </div>
+        style={{
+          position: this.state.isDragging ? 'fixed' : 'absolute',
+          left: `${this.state.isDragging ? this.state.clientX : this.props.left - 1}px`,
+          top: `${this.state.isDragging ? this.state.clientY : this.props.top - 1}px`,
+          height: `${this.props.height}px`
+        }}
+      />
     )
   }
 }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import TextSelection from './TextSelection'
-import Knob from './Knob'
+import Boundary from './Boundary'
+import BoundaryControl from './BoundaryControl'
 
 export default class Example extends Component {
   constructor(props) {
@@ -157,23 +158,48 @@ export default class Example extends Component {
 
     const boundary1 =
       firstRect &&
-      <Knob
-        kind='start'
+      <Boundary
+        kind="start"
         isHighlighting={this.state.isHighlighting}
         left={firstRect.left - 1}
         top={firstRect.top}
         height={firstRect.height}
-        onMove={this.handleStartKnobMove}
       />
     const boundary2 =
       lastRect &&
-      <Knob
-        kind='end'
+      firstRect !== lastRect &&
+      lastRect.left !== lastRect.right &&
+      <Boundary
+        kind="end"
         isHighlighting={this.state.isHighlighting}
         left={lastRect.right}
         top={lastRect.top}
         bottom={lastRect.bottom}
         height={firstRect.height}
+      />
+
+    const boundaryControl1 =
+      firstRect &&
+      !this.state.isHighlighting &&
+      <BoundaryControl
+        kind="start"
+        left={firstRect.left - 1}
+        top={firstRect.top}
+        bottom={firstRect.bottom}
+        height={firstRect.height}
+        onMove={this.handleStartKnobMove}
+      />
+    const boundaryControl2 =
+      lastRect &&
+      !this.state.isHighlighting &&
+      firstRect !== lastRect &&
+      lastRect.left !== lastRect.right &&
+      <BoundaryControl
+        kind="end"
+        left={lastRect.right}
+        top={lastRect.top}
+        bottom={lastRect.bottom}
+        height={lastRect.height}
         onMove={this.handleStartKnobMove}
       />
 
@@ -211,6 +237,8 @@ export default class Example extends Component {
           {addedRects}
           {boundary1}
           {boundary2}
+          {boundaryControl1}
+          {boundaryControl2}
         </div>
       </div>
     )

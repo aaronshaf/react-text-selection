@@ -12,6 +12,7 @@ export default class TextSelection extends Component {
   constructor(props) {
     super(props)
     this.clientRectsArray = []
+    this.isCollapsed = true
   }
 
   componentDidMount() {
@@ -49,6 +50,10 @@ export default class TextSelection extends Component {
   }
 
   setRange = (selection, range) => {
+    if (range.collapsed && !this.isCollapsed) {
+      return
+    }
+    this.isCollapsed = range.collapsed
     if (!this.div.contains(range.commonAncestorContainer)) {
       this.clientRectsArray = []
       if (this.props.onChange) {
