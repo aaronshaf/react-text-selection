@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import TextSelection from './TextSelection'
 import Knob from './Knob'
-import Caret from './Caret'
 
 export default class Example extends Component {
   constructor(props) {
@@ -156,39 +155,25 @@ export default class Example extends Component {
       return state
     }, null)
 
-    const dragger1 =
+    const boundary1 =
       firstRect &&
       <Knob
-        isVisible={!this.state.isHighlighting}
-        left={firstRect.left}
-        top={firstRect.top}
-        onMove={this.handleStartKnobMove}
-      />
-    const dragger2 =
-      lastRect &&
-      <Knob
-        isVisible={!this.state.isHighlighting}
-        left={lastRect.right}
-        top={lastRect.top}
-        onMove={this.handleStartKnobMove}
-      />
-
-    const caret1 =
-      firstRect &&
-      <Caret
-        isVisible={!this.state.isHighlighting}
+        kind='start'
+        isHighlighting={this.state.isHighlighting}
         left={firstRect.left}
         top={firstRect.top}
         height={firstRect.height}
+        onMove={this.handleStartKnobMove}
       />
-
-    const caret2 =
+    const boundary2 =
       lastRect &&
-      <Caret
-        isVisible={!this.state.isHighlighting}
-        left={lastRect.right}
+      <Knob
+        kind='end'
+        isHighlighting={this.state.isHighlighting}
+        left={lastRect.right - 1}
         top={lastRect.top}
-        height={lastRect.height}
+        height={firstRect.height}
+        onMove={this.handleStartKnobMove}
       />
 
     return (
@@ -223,10 +208,8 @@ export default class Example extends Component {
         >
           {retainedRects}
           {addedRects}
-          {caret1}
-          {caret2}
-          {dragger1}
-          {dragger2}
+          {boundary1}
+          {boundary2}
         </div>
       </div>
     )

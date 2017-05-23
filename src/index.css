@@ -57,16 +57,19 @@ pre {
   background-color: transparent;
 }
 
+.Boundary {
+
+}
+
 .Knob {
   border: 1px solid #E04746;
-  width: 8px;
-  height: 8px;
-  border-radius: 16px;
+  width: 7px;
+  height: 7px;
+  border-radius: 14px;
   position: absolute;
   background-color: white;
-  visibility: hidden;
-  opacity: 0;
-  cursor: col-resize;
+  user-select: none;
+  pointer-events: none;
   transition: opacity 0.15s ease;
 }
 
@@ -99,8 +102,20 @@ pre {
     0 0 0 2px #4498DE;
 }
 
-.Caret {
+.Boundary-caret {
+  width: 3px;
+  padding-left: 1px;
+  padding-right: 1px;
+  position: absolute;
+  background-color: transparent;
+  cursor: col-resize;
+}
+
+.Boundary-caret-inner {
   width: 1px;
-  background-color: red;
+  background-color: #E04746;
+}
+
+.Boundary-caret--dragging {
   pointer-events: none;
 }

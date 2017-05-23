@@ -41,6 +41,9 @@ export default class TextSelection extends Component {
     //   }
     //   return
     // }
+    if (!selection.rangeCount) {
+      return
+    }
     const range = selection.getRangeAt(0)
     this.setRange(selection, range)
   }

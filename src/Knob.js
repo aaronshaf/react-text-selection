@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import classnames from 'classnames'
 
 export default class Knob extends Component {
   constructor(props) {
@@ -62,28 +63,78 @@ export default class Knob extends Component {
 
   handleKeyPress = event => {
     switch (event.key) {
-      case 'ArrowLeft':
+      case 'ArrowLeft': {
+        const divRect = this.div.getBoundingClientRect()
+        const caretRange = document.caretRangeFromPoint(
+          divRect.left - 3 - 1,
+          divRect.top + 8
+        )
+        console.debug(caretRange)
+        const range = document.createRange()
+        range.setStart(
+          caretRange.startContainer,
+          caretRange.startOffset > 0 ? caretRange.startOffset : 0
+        )
+        this.props.onMove(range)
         break
-      case 'ArrowRight':
+      }
+      case 'ArrowRight': {
+        const divRect = this.div.getBoundingClientRect()
+        const caretRange = document.caretRangeFromPoint(
+          divRect.left + 1,
+          divRect.top + 4
+        )
+        console.debug(caretRange)
+        const range = document.createRange()
+        range.setStart(
+          caretRange.startContainer,
+          caretRange.startOffset > 0 ? caretRange.startOffset : 0
+        )
+        this.props.onMove(range)
         break
+      }
       default:
         return
     }
   }
 
+  setDiv = node => {
+    this.div = node
+  }
+
   render() {
     return (
       <div
-        onKeyDown={this.handleKeyPress}
         tabIndex="0"
-        className={`Knob ${this.props.isVisible ? 'Knob--visible' : ''} ${this.props.isDragging ? 'Knob--dragging' : ''}`}
-        style={{
-          position: this.state.isDragging ? 'fixed' : 'absolute',
-          left: `${this.state.isDragging ? this.state.clientX - 4 : this.props.left - 4}px`,
-          top: `${this.state.isDragging ? this.state.clientY - 8 : this.props.top - 8}px`
-        }}
+        onKeyDown={this.handleKeyPress}
+        className="Boundary"
         onMouseDown={this.handleKnobMouseDown}
-      />
+      >
+        <div
+          className={`Knob ${this.props.isHighlighting ? 'Knob--dragging' : ''}`}
+          style={{
+            position: 'absolute',
+            left: `${this.props.left - 4}px`,
+            top: `${this.props.top - 9}px`
+          }}
+        />
+        <div
+          ref={this.setDiv}
+          className={`Boundary-caret ${this.props.isHighlighting ? 'Boundary-caret--dragging' : ''}`}
+          style={{
+            left: `${this.props.left - 1}px`,
+            top: `${this.props.top}px`,
+            height: `${this.props.height}px`
+          }}
+        >
+          <div
+            className="Boundary-caret-inner"
+            style={{
+              height: `${this.props.height}px`
+            }}
+          />
+        </div>
+      </div>
     )
   }
 }
