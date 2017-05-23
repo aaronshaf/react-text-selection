@@ -3,8 +3,16 @@ import PropTypes from 'prop-types'
 
 export default class Boundary extends PureComponent {
   state = {
-    isFocused: false,
     isHovered: false
+  }
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (!prevProps.isHighlighting && this.props.isActive) {
+      console.debug('componentWillReceiveProps (yes)', this.props.kind)
+      this.div.focus()
+    } else {
+      console.debug('componentWillReceiveProps (no)', this.props.kind)
+    }
   }
 
   handleKnobMouseDown = event => {
@@ -15,11 +23,11 @@ export default class Boundary extends PureComponent {
   }
 
   handleFocus = () => {
-    this.setState({ isFocused: true })
+    console.debug('handleFocus')
   }
 
   handleBlur = () => {
-    this.setState({ isFocused: false })
+    console.debug('handleBlur')
   }
 
   handleMouseEnter = () => {
@@ -30,19 +38,32 @@ export default class Boundary extends PureComponent {
     this.setState({ isHovered: false })
   }
 
+  handleClick = () => {
+    console.debug('handleClick')
+    this.setState({}, () => {
+      if (this.props.isActive) {
+        this.div.focus()
+      }
+    })
+    // this.div.focus()
+  }
+
   setDiv = node => {
     this.div = node
   }
 
   render() {
     const knobClasses = ['Knob']
-      .concat(this.state.isFocused ? 'Knob--focus' : [])
       .concat(this.state.isHovered ? 'Knob--hover' : [])
       .join(' ')
 
     return (
       <div
+        tabIndex="0"
+        ref={this.setDiv}
         className="Boundary"
+        onFocus={this.handleFocus}
+        onBlur={this.handleBlur}
         style={{
           left: `${this.props.left}px`,
           top: `${this.props.top}px`,
@@ -56,22 +77,19 @@ export default class Boundary extends PureComponent {
           }}
         />
         <div
-          className={`Boundary-caret ${this.props.isFocused ? 'Knob--focused' : ''}`}
+          className={`Boundary-caret`}
           style={{
             height: `${this.props.height}px`
           }}
         />
         <div
           className="BoundaryControl"
-          onFocus={this.handleFocus}
-          onBlur={this.handleBlur}
           onMouseEnter={this.handleMouseEnter}
           onMouseLeave={this.handleMouseLeave}
-          tabIndex="0"
-          ref={this.setDiv}
           onMouseDown={this.handleKnobMouseDown}
+          onClick={this.handleClick}
           style={{
-            display: this.props.isHighlighting ? 'none' : 'block',
+            pointerEvents: this.props.isHighlighting ? 'none' : 'auto',
             position: 'absolute',
             left: `-1px`,
             top: `-1px`,
@@ -88,5 +106,7 @@ Boundary.propTypes = {
   left: PropTypes.number.isRequired,
   top: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
-  isHighlighting: PropTypes.bool
+  isActive: PropTypes.bool.isRequired,
+  isHighlighting: PropTypes.bool.isRequired,
+  onHighlightStart: PropTypes.func.isRequired
 }

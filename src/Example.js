@@ -12,7 +12,7 @@ export default class Example extends Component {
         removedRects: []
       },
       isHighlighting: false,
-      boundaryMoving: null
+      activeBoundary: null
     }
   }
 
@@ -25,7 +25,7 @@ export default class Example extends Component {
   }
 
   handleHighlightStart = boundaryType => {
-    this.setState({ isHighlighting: true, boundaryMoving: boundaryType })
+    this.setState({ isHighlighting: true, activeBoundary: boundaryType })
   }
 
   handleMouseMove = event => {
@@ -34,14 +34,15 @@ export default class Example extends Component {
     }
 
     const range = document.caretRangeFromPoint(event.clientX, event.clientY)
-    if (this.state.boundaryMoving === 'start') {
+    if (this.state.activeBoundary === 'start') {
       this.handleStartKnobMove(range)
-    } else if (this.state.boundaryMoving === 'end') {
+    } else if (this.state.activeBoundary === 'end') {
       this.handleEndKnobMove(range)
     }
   }
 
   handleHighlightEnd = event => {
+    console.debug('handleHighlightEnd', this.state.activeBoundary)
     this.setState({ isHighlighting: false })
   }
 
@@ -177,22 +178,24 @@ export default class Example extends Component {
       firstRect &&
       <Boundary
         kind="start"
+        isActive={this.state.activeBoundary === 'start'}
         isHighlighting={this.state.isHighlighting}
         onHighlightStart={this.handleHighlightStart}
         left={firstRect.left - 1}
         top={firstRect.top}
         height={firstRect.height}
       />
+
     const boundary2 =
       lastRect &&
       lastRect.left !== lastRect.right &&
       <Boundary
         kind="end"
+        isActive={this.state.activeBoundary === 'end'}
         isHighlighting={this.state.isHighlighting}
         onHighlightStart={this.handleHighlightStart}
         left={lastRect.right}
         top={lastRect.top}
-        bottom={lastRect.bottom}
         height={lastRect.height}
       />
 
