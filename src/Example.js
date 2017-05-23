@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import TextSelection from './TextSelection'
 import Boundary from './Boundary'
-import BoundaryControl from './BoundaryControl'
 
 export default class Example extends Component {
   constructor(props) {
@@ -12,7 +11,8 @@ export default class Example extends Component {
         addedRects: [],
         removedRects: []
       },
-      isHighlighting: false
+      isHighlighting: false,
+      boundaryMoving: null
     }
   }
 
@@ -20,8 +20,25 @@ export default class Example extends Component {
     document.removeEventListener('mousemove', this.handleKnobMouseMove)
   }
 
-  handleHighlightStart = event => {
+  handleMouseDown = () => {
     this.setState({ isHighlighting: true })
+  }
+
+  handleHighlightStart = boundaryType => {
+    this.setState({ isHighlighting: true, boundaryMoving: boundaryType })
+  }
+
+  handleMouseMove = event => {
+    if (!this.state.isHighlighting) {
+      return
+    }
+
+    const range = document.caretRangeFromPoint(event.clientX, event.clientY)
+    if (this.state.boundaryMoving === 'start') {
+      this.handleStartKnobMove(range)
+    } else if (this.state.boundaryMoving === 'end') {
+      this.handleEndKnobMove(range)
+    }
   }
 
   handleHighlightEnd = event => {
@@ -161,6 +178,7 @@ export default class Example extends Component {
       <Boundary
         kind="start"
         isHighlighting={this.state.isHighlighting}
+        onHighlightStart={this.handleHighlightStart}
         left={firstRect.left - 1}
         top={firstRect.top}
         height={firstRect.height}
@@ -171,36 +189,11 @@ export default class Example extends Component {
       <Boundary
         kind="end"
         isHighlighting={this.state.isHighlighting}
-        left={lastRect.right}
-        top={lastRect.top}
-        bottom={lastRect.bottom}
-        height={firstRect.height}
-      />
-
-    const boundaryControl1 =
-      firstRect &&
-      <BoundaryControl
-        kind="start"
-        isHighlighting={this.state.isHighlighting}
-        onHighlightStart={this.handleHighlightStart}
-        left={firstRect.left - 1}
-        top={firstRect.top}
-        bottom={firstRect.bottom}
-        height={firstRect.height}
-        onMove={this.handleStartKnobMove}
-      />
-    const boundaryControl2 =
-      lastRect &&
-      lastRect.left !== lastRect.right &&
-      <BoundaryControl
-        kind="end"
-        isHighlighting={this.state.isHighlighting}
         onHighlightStart={this.handleHighlightStart}
         left={lastRect.right}
         top={lastRect.top}
         bottom={lastRect.bottom}
-        height={lastRect.height}
-        onMove={this.handleEndKnobMove}
+        height={firstRect.height}
       />
 
     return (
@@ -210,9 +203,11 @@ export default class Example extends Component {
           marginTop: '12px',
           marginBottom: '12px',
           display: 'flex',
-          position: 'relative'
+          position: 'relative',
+          cursor: this.state.isHighlighting ? 'col-resize' : 'auto'
         }}
-        onMouseDown={this.handleHighlightStart}
+        onMouseDown={this.handleMouseDown}
+        onMouseMove={this.handleMouseMove}
         onMouseUp={this.handleHighlightEnd}
       >
         <div
@@ -236,8 +231,6 @@ export default class Example extends Component {
           {addedRects}
           {boundary1}
           {boundary2}
-          {boundaryControl1}
-          {boundaryControl2}
         </div>
       </div>
     )

@@ -2,43 +2,11 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 export default class BoundaryControl extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      isDragging: false
-    }
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return !this.state.isDragging
-  }
-
   handleKnobMouseDown = event => {
     // document.body.style.userSelect = 'none'
     event.stopPropagation()
     event.preventDefault()
-    this.props.onHighlightStart(event)
-    this.setState({ isDragging: true }, () => {
-      document.addEventListener('mousemove', this.handleKnobMouseMove)
-      document.addEventListener('mouseup', this.handleKnobMouseUp)
-    })
-  }
-
-  handleKnobMouseMove = event => {
-    event.stopPropagation()
-    if (!this.props.isHighlighting) {
-      return
-    }
-    const range = document.caretRangeFromPoint(event.clientX, event.clientY + 8)
-    if (this.props) {
-      this.props.onMove(range)
-    }
-  }
-
-  handleKnobMouseUp = () => {
-    this.setState({ isDragging: false })
-    document.removeEventListener('mouseup', this.handleKnobMouseUp)
-    document.removeEventListener('mousemove', this.handleKnobMouseMove)
+    this.props.onHighlightStart(this.props.kind)
   }
 
   handleKeyPress = event => {
@@ -94,7 +62,6 @@ export default class BoundaryControl extends Component {
         className="BoundaryControl"
         tabIndex="0"
         ref={this.setDiv}
-        onKeyDown={this.handleKeyPress}
         onMouseDown={this.handleKnobMouseDown}
         style={{
           display: this.props.isHighlighting ? 'none' : 'block',
@@ -110,5 +77,7 @@ export default class BoundaryControl extends Component {
 }
 
 BoundaryControl.propTypes = {
+  left: PropTypes.number.isRequired,
+  top: PropTypes.number.isRequired,
   isHighlighting: PropTypes.bool
 }

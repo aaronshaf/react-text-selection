@@ -58,15 +58,17 @@ pre {
 }
 
 .Knob {
+position: absolute;
   border: 1px solid #E04746;
+  left: -4px;
   width: 7px;
   height: 7px;
   border-radius: 14px;
   position: absolute;
   background-color: white;
   user-select: none;
-  pointer-events: none;
   transition: opacity 0.15s ease;
+  pointer-events: none;
 }
 
 .Knob--visible {
@@ -75,36 +77,30 @@ pre {
   transition: opacity 0.15s ease;
 }
 
-.Knob {
-  pointer-events: none;
-  position: absolute;
-  left: -4px;
-}
-
-.Knob:hover {
-  background-color: #FADBDD;
-}
-
-.Knob:active {
-  background-color: #EB797B;
-  border: 2px solid #DD342E;
-  cursor: none;
-}
-
 .Boundary {
   position: absolute;
-  pointer-events: none;
 }
 
 .Boundary:focus {
   outline: none;
 }
 
-.Boundary:focus .Knob {
-  border-width: 2px;
+.Knob--focus {
   box-shadow:
     0 0 0 1px white,
     0 0 0 2px #4498DE;
+}
+
+.Knob--focus,
+.Knob--hover {
+  border-width: 2px;
+  background-color: #FADBDD;
+}
+
+.Knob--active {
+  background-color: #EB797B;
+  border: 2px solid #DD342E;
+  cursor: none;
 }
 
 .Boundary-caret {
