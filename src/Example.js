@@ -44,7 +44,13 @@ export default class Example extends Component {
   handleHighlightEnd = event => {
     console.debug('handleHighlightEnd', this.state.selection.range)
     // this.state.selection.range.endContainer.focus()
-    this.setState({ isHighlighting: false })
+    console.log('ok 1')
+    const knob = this.div.querySelectorAll('.Boundary')
+    console.debug({knob})
+    this.setState({ isHighlighting: false }, () => {
+      console.log('ok 2')
+    })
+
   }
 
   handleChange = selection => {

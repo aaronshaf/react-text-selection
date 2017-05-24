@@ -67,7 +67,7 @@ pre {
   position: absolute;
   background-color: white;
   user-select: none;
-  transition: opacity 0.15s ease;
+  transition: opacity 0.1s ease, box-shadow 0.1s ease;
   pointer-events: none;
 }
 
