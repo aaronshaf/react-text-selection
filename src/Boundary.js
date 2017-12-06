@@ -8,10 +8,10 @@ export default class Boundary extends PureComponent {
 
   componentDidUpdate = (prevProps, prevState) => {
     if (!prevProps.isHighlighting && this.props.isActive) {
-      console.debug('componentWillReceiveProps (yes)', this.props.kind)
+      // console.debug('componentWillReceiveProps (yes)', this.props.kind)
       this.div.focus()
     } else {
-      console.debug('componentWillReceiveProps (no)', this.props.kind)
+      // console.debug('componentWillReceiveProps (no)', this.props.kind)
     }
   }
 
@@ -23,11 +23,11 @@ export default class Boundary extends PureComponent {
   }
 
   handleFocus = () => {
-    console.debug('handleFocus')
+    // console.debug('handleFocus')
   }
 
   handleBlur = () => {
-    console.debug('handleBlur')
+    // console.debug('handleBlur')
   }
 
   handleMouseEnter = () => {
@@ -39,7 +39,7 @@ export default class Boundary extends PureComponent {
   }
 
   handleClick = () => {
-    console.debug('handleClick')
+    // console.debug('handleClick')
     this.setState({}, () => {
       if (this.props.isActive) {
         this.div.focus()

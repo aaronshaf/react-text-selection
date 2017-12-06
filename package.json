@@ -2,30 +2,27 @@
   "name": "react-text-selection",
   "version": "0.0.0-alpha",
   "dependencies": {
-    "prop-types": "^15.5.10",
-    "react": "^15.5.4",
-    "react-dom": "^15.5.4"
+    "fontmetrics": "^1.0.0",
+    "prop-types": "^15.6.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-scripts": "1.0.17"
   },
-  "devDependencies": {
-    "react-scripts": "1.0.1"
-  },
+  "devDependencies": {},
   "scripts": {
     "start": "react-scripts start",
-    "build": "rm -rf docs && react-scripts build && mv build docs",
+    "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "description": "This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).",
+  "description":
+    "This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).",
   "main": "src/TextSelection.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/aaronshaf/react-text-selection.git"
   },
-  "keywords": [
-    "react",
-    "text",
-    "selection"
-  ],
+  "keywords": ["react", "text", "selection"],
   "author": "Aaron Shafovaloff <aaronshaf@gmail.com>",
   "license": "MIT",
   "bugs": {
